@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NetProbe Wi-Fi</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <div>
+        <h1>NetProbe Wi-Fi</h1>
+        <p>Inventário da rede local por Ping Sweep, ARP Probe e varredura de portas</p>
+      </div>
+    </div>
+    <div class="live" id="live"><span class="dot"></span><span id="live-text">Parado</span></div>
+  </header>
+
+  <main>
+    <form class="panel params" id="scan-form" autocomplete="off">
+      <div class="field wide">
+        <label for="network">Rede (CIDR)</label>
+        <input id="network" name="network" value="{{ default_network }}" required>
+      </div>
+      <div class="field">
+        <label for="icmp_timeout_ms">Timeout ICMP (ms)</label>
+        <input id="icmp_timeout_ms" name="icmp_timeout_ms" type="number" value="1000" min="100" max="10000">
+      </div>
+      <div class="field">
+        <label for="arp_timeout_ms">Timeout ARP (ms)</label>
+        <input id="arp_timeout_ms" name="arp_timeout_ms" type="number" value="2000" min="200" max="10000">
+      </div>
+      <div class="field">
+        <label for="port_start">Porta inicial</label>
+        <input id="port_start" name="port_start" type="number" value="1" min="1" max="65535">
+      </div>
+      <div class="field">
+        <label for="port_end">Porta final</label>
+        <input id="port_end" name="port_end" type="number" value="1024" min="1" max="65535">
+      </div>
+      <div class="field">
+        <label for="port_timeout_ms">Timeout porta (ms)</label>
+        <input id="port_timeout_ms" name="port_timeout_ms" type="number" value="300" min="50" max="5000">
+      </div>
+      <div class="field monitor">
+        <label for="interval_s">Monitoramento em tempo real</label>
+        <div class="inline">
+          <label class="check"><input id="monitor" name="monitor" type="checkbox" checked><span>Repetir a cada</span></label>
+          <input id="interval_s" name="interval_s" type="number" value="10" min="5" max="3600">
+          <span>segundos</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="submit" id="btn-start" class="primary">Iniciar varredura</button>
+        <button type="button" id="btn-stop" class="ghost" disabled>Parar</button>
+      </div>
+      <p class="error" id="form-error" hidden></p>
+    </form>
+
+    <section class="panel progress-panel">
+      <div class="progress-head">
+        <strong id="phase-label">Pronto para iniciar</strong>
+        <span id="progress-text"></span>
+      </div>
+      <div class="bar"><div class="fill" id="progress-fill"></div></div>
+      <div class="meta">
+        <span id="arp-mode"></span>
+        <span id="timings"></span>
+      </div>
+    </section>
+
+    <section class="cards">
+      <div class="card"><span class="num" id="c-online">0</span><span class="lbl">Online</span></div>
+      <div class="card"><span class="num" id="c-icmp">0</span><span class="lbl">Responderam ao ping</span></div>
+      <div class="card warn"><span class="num" id="c-arp">0</span><span class="lbl">ICMP bloqueado (só ARP)</span></div>
+      <div class="card muted"><span class="num" id="c-offline">0</span><span class="lbl">Ficaram offline</span></div>
+      <div class="card danger"><span class="num" id="c-conflicts">0</span><span class="lbl">Conflitos de IP</span></div>
+      <div class="card"><span class="num" id="c-ports">0</span><span class="lbl">Portas abertas</span></div>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="table-head">
+        <h2>Dispositivos</h2>
+        <label class="check small"><input type="checkbox" id="show-free"><span>Mostrar IPs livres (<span id="c-free">0</span>)</span></label>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>IP</th>
+              <th>MAC</th>
+              <th>Detecção</th>
+              <th>Latência</th>
+              <th>TTL</th>
+              <th>Portas abertas</th>
+              <th>Visto por último</th>
+            </tr>
+          </thead>
+          <tbody id="devices"></tbody>
+        </table>
+        <p class="empty" id="empty">Nenhum dispositivo encontrado ainda. Configure a rede e clique em <b>Iniciar varredura</b>.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
