@@ -3,7 +3,7 @@
 Ferramenta de inventário para redes domésticas. Descobre os dispositivos ativos de uma faixa de IPs, encontra também os que bloqueiam ping (via ARP), monta a tabela IP ↔ MAC, lista as portas TCP abertas e mostra o status de cada dispositivo em tempo real numa interface web.
 
 Trabalho final da disciplina de Redes de Computadores — IESB.
-Grupo: Yuri Victor, Danielly Luz, Felipe Oliveira, Gabriel Vieira, Guilherme Ferreira, Heitor Ribeiro e Pedro Arthur.
+Grupo: Yuri Victor, Danielly Luz, Felipe Oliveira, Gabriel Vieira, Guilherme Ferreira, Heitor Ribeiro e Vitor Alexandre.
 
 ## Funcionalidades
 
